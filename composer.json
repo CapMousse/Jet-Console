@@ -1,0 +1,30 @@
+{
+    "name"          : "jet/console",
+    "type"          : "library",
+    "description"   : "Simple package to build command line app",
+    "keywords"      : [
+        "console",
+        "cli"
+    ],
+    "homepage"      : "awaiting",
+    "license"       : "MIT",
+    "authors"       : [
+        {
+            "name"      : "Jérémy Barbe",
+            "email"     : "contact@jeremybarbe.fr",
+            "homepage"  : "http://www.shwaark.com",
+            "role"      : "developer"
+        }
+    ],
+    "require"       : {
+        "php": ">=5.3.2"
+    },
+    "autoload"      : {
+        "psr-0": {
+            "Jet"       : "lib/"
+        }
+    },
+    "bin"           : [
+        "bin/falcon"
+    ]
+}
