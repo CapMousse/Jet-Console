@@ -3,6 +3,7 @@
 namespace Jet\Console\Command;
 
 use Jet\Console\Console;
+use Jet\Console\Exception\CommandException;
 
 abstract class AbstractCommand
 {
@@ -10,19 +11,19 @@ abstract class AbstractCommand
      * Name of the command
      * @var string
      */
-    protected $name = "";
+    public $name = "";
 
     /**
      * Arguments of the command
-     * @var array
+     * @var Argument[]
      */
-    protected $arguments = array();
+    public $arguments = array();
 
     /**
      * The application using the command
      * @var Console
      */
-    protected $application = null;
+    public $console = null;
 
     /**
      * Init a new command on the console object
@@ -70,9 +71,9 @@ abstract class AbstractCommand
      *
      * @return AbstractCommand
      */
-    public function setApplication(Console $app)
+    public function setConsole(Console $app)
     {
-        $this->application = $app;
+        $this->console = $app;
 
         return $this;
     }
@@ -81,7 +82,6 @@ abstract class AbstractCommand
      * Add an argument to the current command
      *
      * @param String      $name        the argument name
-     * @param Array       $method      method to run wen argument detected
      * @param int         $type        Argument::REQUIRED or Argument::OPTIONAL
      * @param Mixed       $value       the default value of the argument
      * @param String|Null $description the description of the argument
@@ -89,7 +89,7 @@ abstract class AbstractCommand
      * @throws \InvalidArgumentException
      * @return AbstractCommand
      */
-    protected function addArgument($name, $method, $type = Argument::OPTIONAL, $value = null, $description = null)
+    protected function addArgument($name, $type = Argument::OPTIONAL, $value = null, $description = null)
     {
         $class = __CLASS__;
 
@@ -97,15 +97,11 @@ abstract class AbstractCommand
             throw new \InvalidArgumentException("Command {$class} : Argument name can't be empty");
         }
 
-        if (empty($method)) {
-            throw new \InvalidArgumentException("Argument {$name} : Argument method can't be empty");
-        }
-
         if (!is_int($type)) {
             throw new \InvalidArgumentException("Argument {$name} : Type must be Argument::REQUIRED or Argument::OPTIONAL");
         }
 
-        $argument = new Argument($name, $method);
+        $argument = new Argument($name);
         $argument
             ->setType($type)
             ->setValue($value)
@@ -147,7 +143,25 @@ abstract class AbstractCommand
      *
      * @return boolean
      */
-    public function hasArgument($name){
+    public function hasArgument($name)
+    {
+        return isset($this->console->commandArguments[$name]);
+    }
 
+    /**
+     * Get the content of an argument
+     *
+     * @param String $name argument name
+     *
+     * @throws \Jet\Console\Exception\CommandException
+     * @return mixed
+     */
+    public function getArgument($name)
+    {
+        if (!$this->hasArgument($name)) {
+            throw new CommandException("Argument {$name} don't exists");
+        }
+
+        return $this->console->commandArguments[$name];
     }
 }

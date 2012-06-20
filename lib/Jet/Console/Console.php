@@ -4,6 +4,7 @@ namespace Jet\Console;
 
 use Jet\Console\Command\AbstractCommand;
 use Jet\Console\Command\HelpCommand;
+use Jet\Console\Command\Argument;
 
 class Console
 {
@@ -65,7 +66,7 @@ class Console
     {
         $this->commands[$command->getName()] = $command;
 
-        $command->setApplication($this);
+        $command->setConsole($this);
 
         return $command;
     }
@@ -153,23 +154,12 @@ class Console
     }
 
     /**
-     * Launch the Console
      *
-     * @param Array $command command to launch
-     *
-     * @return Boolean
      */
-    public function run($command = null)
-    {
-        $this->parseCommand($command);
-
-        if (empty($this->commandName)) {
-            $this->commandName = "help";
-        }
-
-        if (isset($this->commands[$this->commandName])) {
-            $this->commands[$this->commandName]->execute();
-        }
+    public function setExceptionHandler(){
+        set_exception_handler(function(\Exception $exception){
+            print($exception->getMessage()."\n\r");
+        });
     }
 
     /**
@@ -179,7 +169,7 @@ class Console
      *
      * @return Boolean
      */
-    private function parseCommand($command = null)
+    public function parseCommand($command = null)
     {
         $argv = $command === null ? $_SERVER['argv'] : $command;
 
@@ -191,23 +181,83 @@ class Console
         array_shift($argv);
         $this->commandName = array_shift($argv);
 
-        foreach($argv as $i => $arg){
-            if(strstr($arg, '--')){
+        foreach ($argv as $i => $arg) {
+            if (strstr($arg, '--')) {
                 $name = substr($arg, 2);
-                $value = true; //default value
+                $value = null; //default value
 
                 //if a value is set to the argument, get and delete it
-                if(isset($argv[$i+1])){
+                if (isset($argv[$i+1])) {
                     $value = $argv[$i+1];
                     unset($argv[$i+1]);
                 }
 
                 $this->commandArguments[$name] = $value;
-            }else{
+            } else {
                 $this->commandValues[] = $arg;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Scan all argument for the current command
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function fetchArguments(){
+        /** @var AbstractCommand $currentCommand  */
+        $currentCommand = $this->commands[$this->commandName];
+
+        if (count($currentCommand->arguments) > 0) {
+            foreach ($currentCommand->arguments as $argument) {
+                $argumentName = $argument->name;
+                $argumentType = $argument->type;
+
+                if ($argumentType === Argument::REQUIRED && !isset($this->commandArguments[$argumentName])) {
+                    $message = "Missing {$argumentName}";
+
+                    if (!empty($argument->description)) {
+                        $message .= " : ".$argument->description;
+                    }
+
+                    throw new \InvalidArgumentException($message);
+                } else {
+                    if (!isset($this->commandArguments[$argumentName]) && null !== $argument->value) {
+                       $this->commandArguments[$argumentName] = $argument->value;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Launch the Console
+     *
+     * @param Array $command command to launch
+     *
+     * @throws \InvalidArgumentException
+     * @return Boolean
+     */
+    public function run($command = null)
+    {
+        if($command === null){
+            $this->setExceptionHandler();
+        }
+
+        $this->parseCommand($command);
+
+        if (empty($this->commandName) || !isset($this->commands[$this->commandName])) {
+            $this->commandName = "help";
+        }
+
+        $this->fetchArguments();
+
+        if (isset($this->commands[$this->commandName])) {
+            $this->commands[$this->commandName]->execute();
+        } else {
+            throw new \InvalidArgumentException("Command can't be empty");
+        }
     }
 }

@@ -13,7 +13,7 @@ class HelpCommand extends AbstractCommand
     {
         $this
             ->setName('help')
-            ->addArgument('command', array($this, 'commandHelp'), Argument::OPTIONAL, null, 'Details about the input command');
+            ->addArgument('command', Argument::OPTIONAL, null, 'Details about the input command');
     }
 
     /**
@@ -23,6 +23,11 @@ class HelpCommand extends AbstractCommand
      */
     public function execute()
     {
+        if($this->hasArgument('command')){
+            $this->display($this->getArgument('command'));
+        }
+
+        $this->display('test');
         // TODO: Implement execute() method.
     }
 

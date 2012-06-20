@@ -16,11 +16,10 @@ class Argument
      * Create a new argument
      *
      * @param String $name   Name of the argument
-     * @param String $method Method to execute when argument detected
      *
      * @return Argument
      */
-    public function __construct($name, $method)
+    public function __construct($name)
     {
 
     }
