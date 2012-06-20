@@ -16,8 +16,8 @@ class TestCommand extends AbstractCommand
     {
         $this->setName('testCommand');
 
-        $this->addArgument('testArgument', Argument::OPTIONAL, null, "A optional test argument for the test command");
-        $this->addArgument('testArgument', Argument::REQUIRED, null, "A required test argument for the test command");
+        $this->addArgument('argument1', Argument::REQUIRED, null, "A required test argument for the test command");
+        $this->addArgument('argument2', Argument::OPTIONAL, null, "A optional test argument for the test command");
     }
 
     /**
@@ -28,5 +28,14 @@ class TestCommand extends AbstractCommand
     public function execute()
     {
         $this->display('this is a test command');
+
+        $argument1 = $this->getArgument('argument1');
+
+        $this->display("Argument1 value is {$argument1}");
+
+        if($this->hasArgument('argument2')){
+            $argument2 = $this->getArgument('argument2');
+            $this->display("Argument2 defined and value is {$argument2}");
+        }
     }
 }

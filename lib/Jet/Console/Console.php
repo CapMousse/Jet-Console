@@ -212,20 +212,20 @@ class Console
 
         if (count($currentCommand->arguments) > 0) {
             foreach ($currentCommand->arguments as $argument) {
-                $argumentName = $argument->name;
-                $argumentType = $argument->type;
+                $argumentName = $argument->getName();
+                $argumentType = $argument->getType();
 
                 if ($argumentType === Argument::REQUIRED && !isset($this->commandArguments[$argumentName])) {
                     $message = "Missing {$argumentName}";
 
                     if (!empty($argument->description)) {
-                        $message .= " : ".$argument->description;
+                        $message .= " : ".$argument->getDescription();
                     }
 
                     throw new \InvalidArgumentException($message);
                 } else {
-                    if (!isset($this->commandArguments[$argumentName]) && null !== $argument->value) {
-                       $this->commandArguments[$argumentName] = $argument->value;
+                    if (!isset($this->commandArguments[$argumentName]) && null !== $argument->getValue()) {
+                       $this->commandArguments[$argumentName] = $argument;
                     }
                 }
             }

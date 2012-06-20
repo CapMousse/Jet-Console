@@ -154,8 +154,8 @@ abstract class AbstractCommand
      *
      * @param String $name argument name
      *
+     * @return \Jet\Console\Command\Argument
      * @throws \Jet\Console\Exception\CommandException
-     * @return mixed
      */
     public function getArgument($name)
     {
