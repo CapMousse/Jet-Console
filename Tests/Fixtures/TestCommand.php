@@ -4,7 +4,7 @@ namespace Tests\Fixtures;
 
 use Jet\Console\Command\AbstractCommand;
 
-class GenerateModel extends AbstractCommand
+class TestCommand extends AbstractCommand
 {
     /**
      * Add command with name, argument and description
@@ -13,7 +13,7 @@ class GenerateModel extends AbstractCommand
      */
     public function configure()
     {
-        $this->setName('generate:model');
+        $this->setName('test:command');
     }
 
     /**

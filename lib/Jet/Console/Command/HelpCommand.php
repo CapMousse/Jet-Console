@@ -27,8 +27,7 @@ class HelpCommand extends AbstractCommand
             $this->display($this->getArgument('command'));
         }
 
-        $this->display('test');
-        // TODO: Implement execute() method.
+        $this->display('help');
     }
 
     /**
