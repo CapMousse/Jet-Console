@@ -27,7 +27,7 @@ foreach ($dir as $file) {
     $namespace = '\\Jet\\Console\\Command';
     $reflection = new \ReflectionClass('Tests\\Fixtures\\'.$fileInfos['filename']);
 
-    if ($reflection->isSubclassOf($namespace.'\\AbstractCommand') && !$reflection->isAbstract() === false) {
+    if ($reflection->isSubclassOf($namespace.'\\AbstractCommand') && $reflection->isAbstract() === false) {
         $app->addCommand($reflection->newInstance());
     }
 }

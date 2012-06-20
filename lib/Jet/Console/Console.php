@@ -154,11 +154,11 @@ class Console
     }
 
     /**
-     *
+     * Set the exception handler to display in console
      */
     public function setExceptionHandler(){
         set_exception_handler(function(\Exception $exception){
-            print($exception->getMessage()."\n\r");
+            print($exception->getMessage()."\n");
         });
     }
 
@@ -248,8 +248,13 @@ class Console
 
         $this->parseCommand($command);
 
-        if (empty($this->commandName) || !isset($this->commands[$this->commandName])) {
+        if (empty($this->commandName)) {
             $this->commandName = "help";
+        }
+
+        if (!isset($this->commands[$this->commandName])){
+            echo "Command '".$this->commandName."' don't exists. Try help for command list \n";
+            exit(0);
         }
 
         $this->fetchArguments();

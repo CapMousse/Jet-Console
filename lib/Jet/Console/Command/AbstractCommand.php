@@ -101,8 +101,9 @@ abstract class AbstractCommand
             throw new \InvalidArgumentException("Argument {$name} : Type must be Argument::REQUIRED or Argument::OPTIONAL");
         }
 
-        $argument = new Argument($name);
+        $argument = new Argument();
         $argument
+            ->setName($name)
             ->setType($type)
             ->setValue($value)
             ->setDescription($description);

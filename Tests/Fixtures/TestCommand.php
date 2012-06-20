@@ -3,6 +3,7 @@
 namespace Tests\Fixtures;
 
 use Jet\Console\Command\AbstractCommand;
+use Jet\Console\Command\Argument;
 
 class TestCommand extends AbstractCommand
 {
@@ -11,19 +12,12 @@ class TestCommand extends AbstractCommand
      *
      * @return void
      */
-    public function configure()
-    {
-        $this->setName('test:command');
-    }
-
-    /**
-     * Add command with name, argument and description
-     *
-     * @return void
-     */
     public function init()
     {
-        // TODO: Implement init() method.
+        $this->setName('testCommand');
+
+        $this->addArgument('testArgument', Argument::OPTIONAL, null, "A optional test argument for the test command");
+        $this->addArgument('testArgument', Argument::REQUIRED, null, "A required test argument for the test command");
     }
 
     /**
@@ -33,6 +27,6 @@ class TestCommand extends AbstractCommand
      */
     public function execute()
     {
-        // TODO: Implement execute() method.
+        $this->display('this is a test command');
     }
 }
