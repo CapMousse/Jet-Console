@@ -7,10 +7,10 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="true"
-         stopOnFailure="true"
+         stopOnFailure="false"
          syntaxCheck="true"
          bootstrap="Tests/bootstrap.php"
-         verbose="false">
+         verbose="true">
 
   <testsuites>
     <testsuite name="Command Test Suite">
