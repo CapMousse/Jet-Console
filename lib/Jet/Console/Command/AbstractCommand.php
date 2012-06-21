@@ -14,6 +14,12 @@ abstract class AbstractCommand
     public $name = "";
 
     /**
+     * Description of the command
+     * @var string
+     */
+    public $description = "";
+
+    /**
      * Arguments of the command
      * @var Argument[]
      */
@@ -62,6 +68,30 @@ abstract class AbstractCommand
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the description of the command
+     *
+     * @param String $description
+     *
+     * @return AbstractCommand
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description of the command
+     *
+     * @return String
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -164,5 +194,25 @@ abstract class AbstractCommand
         }
 
         return $this->console->commandArguments[$name];
+    }
+
+    /**
+     * Check if a command has values
+     *
+     * @return bool
+     */
+    public function hasValues()
+    {
+        return count($this->console->commandValues) > 0;
+    }
+
+    /**
+     * Get the command values
+     *
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->console->commandValues;
     }
 }

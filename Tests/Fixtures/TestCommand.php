@@ -14,7 +14,9 @@ class TestCommand extends AbstractCommand
      */
     public function init()
     {
-        $this->setName('testCommand');
+        $this
+            ->setName('testCommand')
+            ->setDescription('A test command for unit testing');
 
         $this->addArgument('argument1', Argument::REQUIRED, null, "A required test argument for the test command");
         $this->addArgument('argument2', Argument::OPTIONAL, null, "A optional test argument for the test command");

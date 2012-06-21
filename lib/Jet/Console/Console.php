@@ -8,12 +8,40 @@ use Jet\Console\Command\Argument;
 
 class Console
 {
+    /**
+     * Name of the console
+     * @var String
+     */
     public $name;
+
+    /**
+     * Version of the console tool
+     * @var String
+     */
     public $version;
+
+    /**
+     * List of available commands
+     * @var AbstractCommand[]
+     */
     public $commands = array();
 
+    /**
+     * User asked command
+     * @var string
+     */
     public $commandName = "";
+
+    /**
+     * User arguments
+     * @var array
+     */
     public $commandArguments = array();
+
+    /**
+     * User values
+     * @var array
+     */
     public $commandValues = array();
 
     /**
