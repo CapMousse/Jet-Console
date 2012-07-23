@@ -41,10 +41,15 @@ class Argument
      *
      * @param $type
      *
+     * @throws \InvalidArgumentException
      * @return Argument
      */
     public function setType($type)
     {
+        if (!is_int($type) || $type > 2) {
+            throw new \InvalidArgumentException('setType must be REQUIRED or OPTIONAL');
+        }
+
         $this->type = $type;
 
         return $this;

@@ -1,4 +1,4 @@
-Jet-ORM
+Jet Console
 =======
 
 A light PHP5.3 ORM

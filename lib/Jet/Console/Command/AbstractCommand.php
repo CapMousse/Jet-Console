@@ -49,7 +49,7 @@ abstract class AbstractCommand
      * @throws \InvalidArgumentException
      * @return AbstractCommand
      */
-    protected function setName($name)
+    public function setName($name)
     {
         if (true === empty($name)) {
             throw new \InvalidArgumentException("Command name can't be empty");
@@ -119,7 +119,7 @@ abstract class AbstractCommand
      * @throws \InvalidArgumentException
      * @return AbstractCommand
      */
-    protected function addArgument($name, $type = Argument::OPTIONAL, $value = null, $description = null)
+    public function addArgument($name, $type = Argument::OPTIONAL, $value = null, $description = null)
     {
         $class = __CLASS__;
 

@@ -2,7 +2,7 @@
 
 namespace Jet\Console\Exception;
 
-class CommandException extends \Exception
+class ConsoleException extends \Exception
 {
 
 }

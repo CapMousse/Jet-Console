@@ -73,4 +73,41 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Jet\Console\Command\AbstractCommand', $app->addCommand(new \Tests\Fixtures\TestCommand()), "Console::addCommands don't return command");
     }
+
+    public function testParseCommand()
+    {
+        $app = new Console();
+        $this->assertFalse($app->parseCommand(array()), 'Console::parseCommand parse empty command');
+        $this->assertTrue($app->parseCommand(array('help')), "Console::parseCommand don't parse command");
+        $this->assertEquals('help', $app->commandName, "Console::parseCommand don't find command name");
+
+        $app = new Console();
+        $app->parseCommand(array('help', '--command', 'test'));
+        $this->assertEquals(array('command' => 'test'), $app->commandArguments, "Console::parseCommand don't find command argument");
+
+        $app = new Console();
+        $randomValue = time();
+        $app->parseCommand(array('help', $randomValue));
+        $this->assertEquals(array($randomValue), $app->commandValues, "Console::parseCommand don't find command values");
+    }
+
+    public function testFetchArguments()
+    {
+        $app = new Console();
+        try{
+            $app->fetchArguments();
+            $this->fail('Console::fetchArguments fetch without command');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('\Jet\Console\Exception\ConsoleException', $e, "Console::fetchArguments throw bad exception");
+        }
+
+        $app = new Console();
+        $app->parseCommand(array('help'));
+        $this->assertFalse($app->fetchArguments(), "Console::fetchArguments fetch empty argument list");
+
+        $app = new Console();
+        $app->addCommand(new \Tests\Fixtures\TestCommand());
+        $app->parseCommand(array('testCommand', '--argument1', 'test'));
+        $this->assertTrue($app->fetchArguments(), "Console::fetchArguments don't fetch argument list");
+    }
 }

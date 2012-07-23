@@ -6,6 +6,8 @@ use Jet\Console\Command\AbstractCommand;
 use Jet\Console\Command\HelpCommand;
 use Jet\Console\Command\Argument;
 
+use Jet\Console\Exception\ConsoleException;
+
 class Console
 {
     /**
@@ -205,25 +207,33 @@ class Console
             return false;
         }
 
-        //don't need the bin name
-        array_shift($argv);
+        if ($command === null) {
+            //don't need the bin name
+            array_shift($argv);
+        }
+
         $this->commandName = array_shift($argv);
+        $parsedValue = array();
 
         foreach ($argv as $i => $arg) {
-            if (strstr($arg, '--')) {
-                $name = substr($arg, 2);
-                $value = null; //default value
-
-                //if a value is set to the argument, get and delete it
-                if (isset($argv[$i+1])) {
-                    $value = $argv[$i+1];
-                    unset($argv[$i+1]);
+            if (substr($arg, 0, 2) != '--') {
+                if(!isset($parsedValue[$i])){
+                    $this->commandValues[] = $arg;
                 }
 
-                $this->commandArguments[$name] = $value;
-            } else {
-                $this->commandValues[] = $arg;
+                continue;
             }
+
+            $name = substr($arg, 2);
+            $value = null; //default value
+
+            //if a value is set to the argument, get and delete it
+            if (isset($argv[$i+1])) {
+                $value = $argv[$i+1];
+                $parsedValue[$i+1] = $value;
+            }
+
+            $this->commandArguments[$name] = $value;
         }
 
         return true;
@@ -232,32 +242,42 @@ class Console
     /**
      * Scan all argument for the current command
      *
+     * @throws Exception\ConsoleException
      * @throws \InvalidArgumentException
+     * @return boolean
      */
     public function fetchArguments(){
+        if ($this->commandName == null) {
+            throw new ConsoleException("fetchArguments launch without command");
+        }
+
         /** @var AbstractCommand $currentCommand  */
         $currentCommand = $this->commands[$this->commandName];
 
-        if (count($currentCommand->arguments) > 0) {
-            foreach ($currentCommand->arguments as $argument) {
-                $argumentName = $argument->getName();
-                $argumentType = $argument->getType();
+        if (count($currentCommand->arguments) == 0) {
+            return false;
+        }
 
-                if ($argumentType === Argument::REQUIRED && !isset($this->commandArguments[$argumentName])) {
-                    $message = "Missing {$argumentName}";
+        foreach ($currentCommand->arguments as $argument) {
+            $argumentName = $argument->getName();
+            $argumentType = $argument->getType();
 
-                    if (!empty($argument->description)) {
-                        $message .= " : ".$argument->getDescription();
-                    }
+            if ($argumentType === Argument::REQUIRED && !isset($this->commandArguments[$argumentName])) {
+                $message = "Missing {$argumentName}";
 
-                    throw new \InvalidArgumentException($message);
-                } else {
-                    if (!isset($this->commandArguments[$argumentName]) && null !== $argument->getValue()) {
-                       $this->commandArguments[$argumentName] = $argument;
-                    }
+                if (!empty($argument->description)) {
+                    $message .= " : ".$argument->getDescription();
+                }
+
+                throw new \InvalidArgumentException($message);
+            } else {
+                if (!isset($this->commandArguments[$argumentName]) && null !== $argument->getValue()) {
+                   $this->commandArguments[$argumentName] = $argument;
                 }
             }
         }
+
+        return true;
     }
 
     /**

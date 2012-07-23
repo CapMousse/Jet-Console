@@ -24,7 +24,7 @@ class HelpCommand extends AbstractCommand
     public function execute()
     {
         if ($this->hasValues()) {
-            $command = array_shift($this->getValues());
+            $command = array_pop($this->getValues());
 
             $this->commandHelp($command);
         } else {
