@@ -1,3 +1,5 @@
+[![Travis status](https://secure.travis-ci.org/CapMousse/Jet-Console.png)](http://travis-ci.org/#!/CapMousse/Jet-Console)
+
 #Jet Console
 
 > The Jet Console package help you to create simple, reliable and testable command line utilities for your application
@@ -72,6 +74,10 @@ Let's run !
 ```
 bin/test example --hello you
 ```
+
+#Test
+
+Just run `phpunit` or see the travis status
 
 Feel free to contribute!
 ------------------------
