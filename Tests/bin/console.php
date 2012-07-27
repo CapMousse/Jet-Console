@@ -1,14 +1,6 @@
 <?php
 
-set_time_limit(0);
-
-if (!class_exists('\Falcon\Common\Falcon')) {
-    if (file_exists($file = __DIR__ . '/../vendor/autoload.php')) {
-        include_once $file;
-    } else {
-        include_once __DIR__ . '/../../autoload.dist.php';
-    }
-}
+include_once __DIR__ . '/../../autoload.dist.php';
 
 Use Jet\Console\Console;
 

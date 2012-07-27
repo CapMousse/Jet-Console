@@ -23,8 +23,5 @@
         "psr-0": {
             "Jet"       : "lib/"
         }
-    },
-    "bin"           : [
-        "bin/falcon"
-    ]
+    }
 }
