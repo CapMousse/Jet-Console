@@ -7,7 +7,7 @@
         "cli"
     ],
     "homepage"      : "awaiting",
-    "license"       : "MIT",
+    "license"       : "BSD",
     "authors"       : [
         {
             "name"      : "Jérémy Barbe",
