@@ -1,19 +1,19 @@
 [![Travis status](https://secure.travis-ci.org/CapMousse/Jet-Console.png)](http://travis-ci.org/#!/CapMousse/Jet-Console)
 
-#Jet Console
+# Jet Console
 
 > The Jet Console package help you to create simple, reliable and testable command line utilities for your application
 > You can easily create command line elements for your taks, deployment and more.
 
-##Why ?
+## Why ?
 
 I created this simple console package to simplify the creation of command line app. It's not like Symfony Console component, it's more simple, faster and flexible.
 
-##Installation
+## Installation
 
 Just download the git repository and get and autoload. Or load file manually. But I realy recommand to get an autoload file (realy, it's just crazy to load all file manualy).
 
-##How to use
+## How to use
 
 To use this console package, you just need to create your command :
 
@@ -45,7 +45,7 @@ class ExampleCommand extends AbstractCommand
 
     public function someMethod()
     {
-        $argument = $this->getArgument('hello);
+        $argument = $this->getArgument('hello');
         $this->display("hello {$argument}");
     }
 }
@@ -75,7 +75,7 @@ Let's run !
 bin/test example --hello you
 ```
 
-#Test
+# Test
 
 Just run `phpunit` or see the travis status
 
